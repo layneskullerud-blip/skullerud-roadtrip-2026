@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skullerud Family Roadtrip 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --bg:#faf7ef;
+    --card:#ffffff;
+    --card-border:#e3ddc9;
+    --amber:#c17d2e;
+    --blue:#2f7ea8;
+    --text:#26332a;
+    --muted:#6f7d70;
+    --line:#d8d2bd;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 15% -5%, #f1ecd9 0%, transparent 60%),
+      radial-gradient(1000px 700px at 90% 10%, #eef3ea 0%, transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:64px 24px 96px;}
+
+  header{text-align:center;margin-bottom:12px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:clamp(34px,6vw,58px);
+    line-height:1.05;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  h1 span{color:var(--blue);font-style:italic;font-weight:600;}
+  .sub{
+    color:var(--muted);
+    font-size:16px;
+    max-width:560px;
+    margin:0 auto 8px;
+    line-height:1.55;
+  }
+  .stats-row{
+    display:flex;
+    justify-content:center;
+    gap:28px;
+    margin:36px 0 8px;
+    flex-wrap:wrap;
+  }
+  .stat{text-align:center;}
+  .stat b{
+    display:block;
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    color:var(--amber);
+  }
+  .stat span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:var(--muted);
+  }
+
+  .alert{
+    margin:40px 0 8px;
+    background:rgba(226,162,63,.12);
+    border:1px solid rgba(226,162,63,.4);
+    border-radius:10px;
+    padding:14px 18px;
+    font-size:14px;
+    color:#5c3d14;
+    line-height:1.5;
+  }
+  .alert b{color:#9c5518;}
+
+  .map-section{margin:40px 0 8px;}
+  .map-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:10px;
+  }
+  #tripmap{
+    width:100%;
+    height:460px;
+    border-radius:14px;
+    border:1px solid var(--card-border);
+    background:var(--card);
+  }
+  .leaflet-popup-content-wrapper{
+    border-radius:8px;
+    font-family:'Inter',sans-serif;
+  }
+  .popup-title{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:14px;
+    margin-bottom:2px;
+    color:var(--text);
+  }
+  .popup-sub{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--muted);
+  }
+
+  .route{position:relative;margin-top:56px;}
+  .route::before{
+    content:"";
+    position:absolute;
+    left:24px;
+    top:8px;
+    bottom:8px;
+    width:2px;
+    background:repeating-linear-gradient(to bottom,var(--line) 0 8px,transparent 8px 15px);
+  }
+  @media(min-width:720px){
+    .route::before{left:50%;margin-left:-1px;}
+  }
+
+  .stop{
+    position:relative;
+    margin-bottom:44px;
+    padding-left:56px;
+  }
+  @media(min-width:720px){
+    .stop{
+      padding-left:0;
+      width:50%;
+      margin-bottom:64px;
+    }
+    .stop.right{margin-left:50%;padding-left:44px;}
+    .stop.left{padding-right:44px;text-align:right;}
+    .stop.left .card{text-align:left;}
+  }
+
+  .node{
+    position:absolute;
+    left:16px;
+    top:2px;
+    width:18px;height:18px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--amber);
+    z-index:2;
+  }
+  .stop.arrive .node{border-color:var(--blue);background:var(--blue);}
+  @media(min-width:720px){
+    .stop.right .node{left:-9px;}
+    .stop.left .node{left:auto;right:-10px;}
+  }
+
+  .daytag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:8px;
+  }
+  .stop.arrive .daytag{color:var(--blue);}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .photo{
+    width:100%;
+    aspect-ratio:16/9;
+    object-fit:cover;
+    display:block;
+    background:linear-gradient(135deg,#eee7d2,#e3ddc9);
+  }
+  .photo-grid{
+    display:flex;
+    gap:3px;
+    background:var(--card-border);
+  }
+  .photo-grid .photo-half{
+    width:100%;
+    height:280px;
+    object-fit:contain;
+    display:block;
+    background:#f1ecd9;
+  }
+  .photo-cap{
+    position:relative;
+    width:50%;
+  }
+  .photo-cap-label{
+    position:absolute;
+    bottom:6px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:9.5px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:#fffaf0;
+    background:rgba(38,51,42,.55);
+    padding:2px 6px;
+    border-radius:4px;
+  }
+  .photo-fallback{
+    width:100%;
+    aspect-ratio:16/9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#f1ecd9,#e6e9df);
+    color:var(--muted);
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:15px;
+    text-align:center;
+    padding:12px;
+  }
+  .card-body{padding:18px 20px 20px;}
+  .card h3{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:20px;
+    margin:0 0 4px;
+    line-height:1.25;
+  }
+  .loc{color:var(--muted);font-size:13.5px;margin-bottom:12px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .chip{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    padding:5px 9px;
+    border-radius:6px;
+    background:rgba(0,0,0,.035);
+    border:1px solid var(--card-border);
+    color:var(--text);
+    white-space:nowrap;
+  }
+  .chip.drive{color:var(--blue);border-color:rgba(47,126,168,.3);background:rgba(47,126,168,.08);}
+  .chip.avail{color:#3d7a4c;border-color:rgba(61,122,76,.35);background:rgba(61,122,76,.08);}
+  .book{
+    display:inline-block;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13.5px;
+    color:#fffaf0;
+    background:var(--amber);
+    padding:9px 16px;
+    border-radius:8px;
+    text-decoration:none;
+  }
+  .book:hover{filter:brightness(1.08);}
+  .book.secondary{
+    background:transparent;
+    color:var(--blue);
+    border:1px solid rgba(47,126,168,.4);
+  }
+  .note{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-top:10px;
+    line-height:1.5;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:60px;
+    color:var(--muted);
+    font-size:12.5px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  .tabs{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin:36px 0 8px;
+  }
+  .tab-btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    padding:10px 20px;
+    border-radius:999px;
+    border:1px solid var(--card-border);
+    background:var(--card);
+    color:var(--muted);
+    cursor:pointer;
+  }
+  .tab-btn.active{
+    background:var(--amber);
+    border-color:var(--amber);
+    color:#fffaf0;
+  }
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .pack-columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-top:32px;
+  }
+  @media(max-width:680px){
+    .pack-columns{grid-template-columns:1fr;}
+  }
+  .pack-person{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:24px;
+  }
+  .pack-person h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:22px;
+    margin:0 0 4px;
+  }
+  .pack-person .pack-sub{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:18px;
+  }
+  .pack-cat{margin-bottom:20px;}
+  .pack-cat:last-child{margin-bottom:0;}
+  .pack-cat h3{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin:0 0 10px;
+    border-bottom:1px solid var(--card-border);
+    padding-bottom:6px;
+  }
+  .pack-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+    padding:5px 0;
+    color:var(--text);
+  }
+  .pack-item input{
+    width:16px;height:16px;
+    accent-color:var(--amber);
+    flex-shrink:0;
+  }
+  .pack-item label{cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">27ft Trailer · 14 Nights · 1,300+ Miles</div>
+    <h1>Skullerud Family<br><span>Roadtrip 2026</span></h1>
+    <p class="sub">Seattle to San Diego. Every driving day under four hours. Waterfalls, forests, three nights in Yosemite, and a slow finish down the coast.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('itinerary', this)">Itinerary</button>
+    <button class="tab-btn" onclick="showTab('packing', this)">Packing Lists</button>
+  </div>
+
+  <div id="tab-itinerary" class="tab-panel active">
+
+  <div class="stats-row">
+    <div class="stat"><b>Aug 31</b><span>Depart</span></div>
+    <div class="stat"><b>Sep 14</b><span>Arrive</span></div>
+    <div class="stat"><b>12</b><span>Stops</span></div>
+    <div class="stat"><b>≤4hr</b><span>Per Day</span></div>
+  </div>
+
+  <div class="alert"><b>Heads up —</b> the Yosemite nights (Sep 5–7) fall right on Labor Day weekend. Book that stop and the ones right around it first.</div>
+
+  <div class="map-section">
+    <div class="map-label">Route Map — 12 Stops</div>
+    <div id="tripmap"></div>
+  </div>
+
+  <div class="route">
+
+    <div class="stop right">
+      <div class="node"></div>
+      <div class="daytag">Mon Aug 31 → Tue Sep 1 · Night 1</div>
+      <div class="card">
+        <div class="photo-grid">
+          <div class="photo-cap"><img class="photo-half" src="https://commons.wikimedia.org/wiki/Special:FilePath/Champoeg%20State%20Park%20museum.JPG?width=500" alt="Champoeg State Park" onerror="this.style.display='none'"><span class="photo-cap-label">Park</span></div>
+          <div class="photo-cap"><img class="photo-half" src="https://oregonstateparks-pl.static.reserveamerica.com/webphotos/OR/pid405213/sid11021/0/180x120.jpg" alt="Champoeg campsite" onerror="this.style.display='none'"><span class="photo-cap-label">This site</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Champoeg State Heritage Area</h3>
+          <div class="loc">Near Newberg, Oregon</div>
+          <div class="chips">
+            <span class="chip drive">175 mi · 3.5 hr from Seattle</span>
+            <span class="chip avail">Available · $50/night</span>
+          </div>
+          <a class="book" href="https://www.reserveamerica.com/explore/champoeg-state-heritage-area/OR/405213/overview" target="_blank" rel="noopener">Book on ReserveAmerica</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop left">
+      <div class="node"></div>
+      <div class="daytag">Tue Sep 1 → Wed Sep 2 · Night 2</div>
+      <div class="card">
+        <div class="photo-grid">
+          <div class="photo-cap"><img class="photo-half" src="https://commons.wikimedia.org/wiki/Special:FilePath/South%20Falls%2C%20Silver%20Falls%20State%20Park.jpg?width=500" alt="Silver Falls State Park" onerror="this.style.display='none'"><span class="photo-cap-label">Park</span></div>
+          <div class="photo-cap"><img class="photo-half" src="https://oregonstateparks-pl.static.reserveamerica.com/webphotos/OR/pid402235/sid17269/0/180x120.jpg" alt="Silver Falls campsite" onerror="this.style.display='none'"><span class="photo-cap-label">This site</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Silver Falls State Park</h3>
+          <div class="loc">Sublimity, Oregon</div>
+          <div class="chips">
+            <span class="chip drive">55 mi · 1.5 hr</span>
+            <span class="chip">Trail of Ten Falls</span>
+            <span class="chip avail">Available · $50/night (2 left)</span>
+          </div>
+          <a class="book" href="https://www.reserveamerica.com/explore/silver-falls-state-park/OR/402235/overview" target="_blank" rel="noopener">Book on ReserveAmerica</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop right">
+      <div class="node"></div>
+      <div class="daytag">Wed Sep 2 → Thu Sep 3 · Night 3</div>
+      <div class="card">
+        <div class="photo-grid">
+          <div class="photo-cap"><img class="photo-half" src="https://commons.wikimedia.org/wiki/Special:FilePath/Rogue%20River%20Oregon%20USA.jpg?width=500" alt="Valley of the Rogue State Park" onerror="this.style.display='none'"><span class="photo-cap-label">Park</span></div>
+          <div class="photo-cap"><img class="photo-half" src="https://oregonstateparks-pl.static.reserveamerica.com/webphotos/OR/pid402363/sid9704/0/180x120.jpg" alt="Valley of the Rogue campsite" onerror="this.style.display='none'"><span class="photo-cap-label">This site</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Valley of the Rogue State Park</h3>
+          <div class="loc">Gold Hill, Oregon</div>
+          <div class="chips">
+            <span class="chip drive">165 mi · 3 hr</span>
+            <span class="chip avail">Available · $53/night</span>
+          </div>
+          <a class="book" href="https://www.reserveamerica.com/explore/valley-of-the-rogue-state-park/OR/402363/overview" target="_blank" rel="noopener">Book on ReserveAmerica</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop left">
+      <div class="node"></div>
+      <div class="daytag">Thu Sep 3 → Fri Sep 4 · Night 4</div>
+      <div class="card">
+        <div class="photo-grid">
+          <div class="photo-cap"><img class="photo-half" src="https://commons.wikimedia.org/wiki/Special:FilePath/Burney%20falls%20from%20below.JPG?width=500" alt="McArthur-Burney Falls" onerror="this.style.display='none'"><span class="photo-cap-label">Park</span></div>
+          <div class="photo-cap"><img class="photo-half" src="https://www.reservecalifornia.com/images/California/ParkImages/Units/42935.jpg" alt="McArthur-Burney Falls campsite" onerror="this.style.display='none'"><span class="photo-cap-label">This site</span></div>
+        </div>
+        <div class="card-body">
+          <h3>McArthur-Burney Falls Memorial SP</h3>
+          <div class="loc">Burney, California — crosses into CA today</div>
+          <div class="chips">
+            <span class="chip drive">130 mi · 2.5 hr</span>
+            <span class="chip avail">Available · $35/night</span>
+            <span class="chip">No hookups</span>
+          </div>
+          <a class="book" href="https://www.parks.ca.gov/?page_id=455" target="_blank" rel="noopener">Reserve — McArthur-Burney Falls</a>
+          <div class="note">Corner site 25 recommended (extra large, well-oriented for a travel trailer)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop right">
+      <div class="node"></div>
+      <div class="daytag">Fri Sep 4 → Sat Sep 5 · Night 5</div>
+      <div class="card">
+        <div class="photo-grid">
+          <div class="photo-cap"><img class="photo-half" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tower%20Bridge%20(Sacramento).jpg?width=500" alt="Sacramento" onerror="this.style.display='none'"><span class="photo-cap-label">Area</span></div>
+          <div class="photo-cap"><img class="photo-half" src="http://www.sherwoodharbor.com/images/img_RVPark.jpg" alt="Sherwood Harbor Marina & RV Park campsite" onerror="this.style.display='none'"><span class="photo-cap-label">This site</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Sherwood Harbor Marina & RV Park</h3>
+          <div class="loc">Sacramento, California — riverside, on the Sacramento River</div>
+          <div class="chips">
+            <span class="chip drive">180 mi · 3.5 hr</span>
+          </div>
+          <a class="book" href="http://sherwoodharbor.com/" target="_blank" rel="noopener">Sherwood Harbor — reserve by phone</a>
+          <div class="note">Reservations by phone only: 916-371-3471. A few reviewers with larger rigs noted a steep/narrow entrance — worth a heads-up call.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop left">
+      <div class="node"></div>
+      <div class="daytag">Sat Sep 5 → Tue Sep 8 · Nights 6–8 (3 nights)</div>
+      <div class="card">
+        <div class="photo-grid">
+          <div class="photo-cap"><img class="photo-half" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tunnel%20View%2C%20Yosemite%20Valley%2C%20Yosemite%20NP%20-%20Diliff.jpg?width=500" alt="Yosemite" onerror="this.style.display='none'"><span class="photo-cap-label">Park</span></div>
+          <div class="photo-cap"><img class="photo-half" src="https://images.campspot.com/eyJidWNrZXQiOiJjYW1wc3BvdC1wcm9kdWN0aW9uIiwia2V5IjoiMzNmYzM1NWEtNmI0ZC00MGU5LTgxNTMtNjZhOWM1ZTRhNGZiX1JWX1BfQmFja0luXzEgMiAxLmpwZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTAwMCwiaGVpZ2h0IjoxMDAwLCJmaXQiOiJpbnNpZGUifSwianBlZyI6eyJxdWFsaXR5Ijo1MH0sInRvRm9ybWF0IjoianBlZyJ9fQ==" alt="Yosemite Pines RV Resort campsite" onerror="this.style.display='none'"><span class="photo-cap-label">This site</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Yosemite Pines RV Resort & Family Lodging</h3>
+          <div class="loc">Groveland, California · ~1.5 hr to Yosemite Valley</div>
+          <div class="chips">
+            <span class="chip drive">170 mi · 3.5 hr</span>
+            <span class="chip">Labor Day weekend</span>
+            <span class="chip avail">Available · $78.38/night</span>
+          </div>
+          <a class="book" href="https://yosemitepinesrv.com/" target="_blank" rel="noopener">Book on Yosemite Pines RV</a>
+          <div class="note">30 min drive to the Yosemite entrance · about 1.5 hours total into Yosemite Valley</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop right">
+      <div class="node"></div>
+      <div class="daytag">Tue Sep 8 → Wed Sep 9 · Night 9</div>
+      <div class="card">
+        <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kern%20River.jpg?width=800" alt="Kern River County Park" onerror="this.outerHTML='<div class=\'photo-fallback\'>Kern River County Park</div>'">
+        <div class="card-body">
+          <h3>Kern River County Park Campground</h3>
+          <div class="loc">Bakersfield, California — down via Hwy 41/99</div>
+          <div class="chips">
+            <span class="chip drive">180 mi · 3.5 hr</span>
+          </div>
+          <a class="book" href="https://www.kerncounty.com/government/parks/reservations/kern-river-campground-reservations" target="_blank" rel="noopener">Book with Kern County</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop left">
+      <div class="node"></div>
+      <div class="daytag">Wed Sep 9 → Thu Sep 10 · Night 10</div>
+      <div class="card">
+        <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Ojai%2C%20California.jpg?width=800" alt="Ventura Ranch KOA near Ojai" onerror="this.outerHTML='<div class=\'photo-fallback\'>Ventura Ranch KOA · near Ojai</div>'">
+        <div class="card-body">
+          <h3>Ventura Ranch KOA</h3>
+          <div class="loc">Santa Paula, CA — near Ojai / Lake Casitas</div>
+          <div class="chips">
+            <span class="chip drive">110 mi · 2.5 hr</span>
+          </div>
+          <a class="book" href="https://koa.com/" target="_blank" rel="noopener">Search KOA Ventura Ranch</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop right">
+      <div class="node"></div>
+      <div class="daytag">Thu Sep 10 → Fri Sep 11 · Night 11</div>
+      <div class="card">
+        <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Leo%20Carrillo%20State%20Beach.jpg?width=800" alt="Leo Carrillo State Park" onerror="this.outerHTML='<div class=\'photo-fallback\'>Leo Carrillo State Park</div>'">
+        <div class="card-body">
+          <h3>Leo Carrillo State Park</h3>
+          <div class="loc">Malibu, California — slow PCH stretch</div>
+          <div class="chips">
+            <span class="chip drive">60 mi · 2 hr</span>
+          </div>
+          <a class="book" href="https://www.parks.ca.gov/leocarrillo" target="_blank" rel="noopener">Reserve — Leo Carrillo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop left">
+      <div class="node"></div>
+      <div class="daytag">Fri Sep 11 → Sun Sep 13 · Nights 12–13 (2 nights)</div>
+      <div class="card">
+        <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Doheny%20State%20Beach.jpg?width=800" alt="San Clemente State Beach" onerror="this.outerHTML='<div class=\'photo-fallback\'>San Clemente State Beach</div>'">
+        <div class="card-body">
+          <h3>San Clemente State Beach</h3>
+          <div class="loc">San Clemente, California — backup for Doheny (unavailable)</div>
+          <div class="chips">
+            <span class="chip drive">90 mi · 2 hr</span>
+            <span class="chip">Full hookups · fits up to 42ft</span>
+          </div>
+          <a class="book" href="https://www.reservecalifornia.com/" target="_blank" rel="noopener">Reserve — San Clemente SB</a>
+          <div class="note">Coastal bluff site, beach access via a tunnel under the train tracks. Alt: San Mateo Campground, San Onofre SB (hookups, up to 36ft).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop right">
+      <div class="node"></div>
+      <div class="daytag">Sun Sep 13 → Mon Sep 14 · Night 14</div>
+      <div class="card">
+        <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Carlsbad%2C%20California%20beach.jpg?width=800" alt="South Carlsbad State Beach" onerror="this.outerHTML='<div class=\'photo-fallback\'>South Carlsbad State Beach</div>'">
+        <div class="card-body">
+          <h3>South Carlsbad State Beach</h3>
+          <div class="loc">Carlsbad, California — last night before San Diego</div>
+          <div class="chips">
+            <span class="chip drive">60 mi · 1.5 hr</span>
+            <span class="chip">Electric + water hookups</span>
+            <span class="chip avail">Available · Premium Site #160 · $70/night</span>
+          </div>
+          <a class="book" href="https://www.parks.ca.gov/southcarlsbad" target="_blank" rel="noopener">Reserve — South Carlsbad</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop left arrive">
+      <div class="node"></div>
+      <div class="daytag">Mon Sep 14 · Arrival</div>
+      <div class="card">
+        <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/San%20Diego%20skyline.jpg?width=800" alt="San Diego" onerror="this.outerHTML='<div class=\'photo-fallback\'>San Diego, California</div>'">
+        <div class="card-body">
+          <h3>San Diego, California</h3>
+          <div class="loc">Trip's end</div>
+          <div class="chips">
+            <span class="chip drive">30 mi · 1 hr</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  </div><!-- /tab-itinerary -->
+
+  <div id="tab-packing" class="tab-panel">
+    <div class="pack-columns">
+
+      <div class="pack-person">
+        <h2>Wayne</h2>
+
+        <div class="pack-cat">
+          <h3>Clothing</h3>
+          <div class="pack-item"><input type="checkbox" id="w1"><label for="w1">Warm weather clothes</label></div>
+          <div class="pack-item"><input type="checkbox" id="w2"><label for="w2">Cool weather clothes</label></div>
+          <div class="pack-item"><input type="checkbox" id="w3"><label for="w3">Pajamas</label></div>
+          <div class="pack-item"><input type="checkbox" id="w4"><label for="w4">Jackets</label></div>
+          <div class="pack-item"><input type="checkbox" id="w5"><label for="w5">Hats</label></div>
+          <div class="pack-item"><input type="checkbox" id="w6"><label for="w6">Swimwear</label></div>
+          <div class="pack-item"><input type="checkbox" id="w7"><label for="w7">Shoes</label></div>
+          <div class="pack-item"><input type="checkbox" id="w8"><label for="w8">Boots</label></div>
+          <div class="pack-item"><input type="checkbox" id="w9"><label for="w9">Sandals</label></div>
+          <div class="pack-item"><input type="checkbox" id="w10"><label for="w10">Socks</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Sleep &amp; Gear</h3>
+          <div class="pack-item"><input type="checkbox" id="w11"><label for="w11">Travel crib</label></div>
+          <div class="pack-item"><input type="checkbox" id="w12"><label for="w12">Sleeping pad and crib sheet</label></div>
+          <div class="pack-item"><input type="checkbox" id="w13"><label for="w13">Blanket</label></div>
+          <div class="pack-item"><input type="checkbox" id="w14"><label for="w14">Baby monitor</label></div>
+          <div class="pack-item"><input type="checkbox" id="w15"><label for="w15">Sound machine</label></div>
+          <div class="pack-item"><input type="checkbox" id="w16"><label for="w16">Car seat</label></div>
+          <div class="pack-item"><input type="checkbox" id="w17"><label for="w17">Stroller</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Feeding &amp; Diapering</h3>
+          <div class="pack-item"><input type="checkbox" id="w18"><label for="w18">Changing pad</label></div>
+          <div class="pack-item"><input type="checkbox" id="w19"><label for="w19">Wipe dispenser and wipes</label></div>
+          <div class="pack-item"><input type="checkbox" id="w20"><label for="w20">Diapers</label></div>
+          <div class="pack-item"><input type="checkbox" id="w21"><label for="w21">Diaper cream</label></div>
+          <div class="pack-item"><input type="checkbox" id="w22"><label for="w22">Aquaphor</label></div>
+          <div class="pack-item"><input type="checkbox" id="w23"><label for="w23">Burp cloths</label></div>
+          <div class="pack-item"><input type="checkbox" id="w24"><label for="w24">Plates, bowls, utensils</label></div>
+          <div class="pack-item"><input type="checkbox" id="w25"><label for="w25">Water bottles</label></div>
+          <div class="pack-item"><input type="checkbox" id="w26"><label for="w26">Snack containers</label></div>
+          <div class="pack-item"><input type="checkbox" id="w27"><label for="w27">Lunch box</label></div>
+          <div class="pack-item"><input type="checkbox" id="w28"><label for="w28">Ice packs</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Health &amp; Safety</h3>
+          <div class="pack-item"><input type="checkbox" id="w29"><label for="w29">Sunscreen &amp; bug spray</label></div>
+          <div class="pack-item"><input type="checkbox" id="w30"><label for="w30">First aid (snot sucker, thermometer, Tylenol)</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Toys</h3>
+          <div class="pack-item"><input type="checkbox" id="w31"><label for="w31">Books</label></div>
+          <div class="pack-item"><input type="checkbox" id="w32"><label for="w32">Train tracks and trains</label></div>
+          <div class="pack-item"><input type="checkbox" id="w33"><label for="w33">Cars</label></div>
+          <div class="pack-item"><input type="checkbox" id="w34"><label for="w34">Magna tiles</label></div>
+          <div class="pack-item"><input type="checkbox" id="w35"><label for="w35">Dump truck</label></div>
+          <div class="pack-item"><input type="checkbox" id="w36"><label for="w36">Blocks</label></div>
+          <div class="pack-item"><input type="checkbox" id="w37"><label for="w37">Stacking cups</label></div>
+          <div class="pack-item"><input type="checkbox" id="w38"><label for="w38">Bike, helmet, pads</label></div>
+          <div class="pack-item"><input type="checkbox" id="w39"><label for="w39">Shovel and bucket</label></div>
+          <div class="pack-item"><input type="checkbox" id="w40"><label for="w40">Stuffed animal</label></div>
+        </div>
+      </div>
+
+      <div class="pack-person">
+        <h2>Bruce</h2>
+
+        <div class="pack-cat">
+          <h3>Feeding</h3>
+          <div class="pack-item"><input type="checkbox" id="b1"><label for="b1">Kibble</label></div>
+          <div class="pack-item"><input type="checkbox" id="b2"><label for="b2">Wet food</label></div>
+          <div class="pack-item"><input type="checkbox" id="b3"><label for="b3">Treats</label></div>
+          <div class="pack-item"><input type="checkbox" id="b4"><label for="b4">Greenies</label></div>
+          <div class="pack-item"><input type="checkbox" id="b5"><label for="b5">Bully sticks</label></div>
+          <div class="pack-item"><input type="checkbox" id="b6"><label for="b6">Food &amp; water bowls</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Sleep &amp; Gear</h3>
+          <div class="pack-item"><input type="checkbox" id="b7"><label for="b7">Car bed</label></div>
+          <div class="pack-item"><input type="checkbox" id="b8"><label for="b8">Trailer bed</label></div>
+          <div class="pack-item"><input type="checkbox" id="b9"><label for="b9">Leash &amp; harness</label></div>
+          <div class="pack-item"><input type="checkbox" id="b10"><label for="b10">Towel</label></div>
+          <div class="pack-item"><input type="checkbox" id="b11"><label for="b11">Poop bags</label></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>Skullerud Family Roadtrip 2026 · Aug 31 – Sep 14</footer>
+
+</div>
+
+<script>
+  function showTab(name, btn){
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById('tab-' + name).classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+
+  var stops = [
+    {name:"Seattle, WA", sub:"Depart · Mon Aug 31", lat:47.6062, lng:-122.3321, start:true},
+    {name:"Champoeg State Heritage Area", sub:"Night 1 · Aug 31–Sep 1", lat:45.2470, lng:-122.8617},
+    {name:"Silver Falls State Park", sub:"Night 2 · Sep 1–2", lat:44.8788, lng:-122.6531},
+    {name:"Valley of the Rogue State Park", sub:"Night 3 · Sep 2–3", lat:42.4310, lng:-123.1867},
+    {name:"McArthur-Burney Falls Memorial SP", sub:"Night 4 · Sep 3–4", lat:41.0170, lng:-121.6497},
+    {name:"Sherwood Harbor Marina & RV Park", sub:"Night 5 · Sep 4–5", lat:38.5816, lng:-121.4944},
+    {name:"Yosemite Pines RV Resort", sub:"Nights 6–8 · Sep 5–8", lat:37.8271, lng:-120.1943},
+    {name:"Kern River County Park", sub:"Night 9 · Sep 8–9", lat:35.4340, lng:-118.8910},
+    {name:"Ventura Ranch KOA", sub:"Night 10 · Sep 9–10", lat:34.3736, lng:-119.0473},
+    {name:"Leo Carrillo State Park", sub:"Night 11 · Sep 10–11", lat:34.0444, lng:-118.9339},
+    {name:"San Clemente State Beach", sub:"Nights 12–13 · Sep 11–13", lat:33.4225, lng:-117.6100},
+    {name:"South Carlsbad State Beach", sub:"Night 14 · Sep 13–14", lat:33.0989, lng:-117.3128},
+    {name:"San Diego, CA", sub:"Arrive · Mon Sep 14", lat:32.7157, lng:-117.1611, arrive:true}
+  ];
+
+  var map = L.map('tripmap', {scrollWheelZoom:false}).setView([40.5, -120.5], 5);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+  }).addTo(map);
+
+  var latlngs = stops.map(function(s){ return [s.lat, s.lng]; });
+  L.polyline(latlngs, {color:'#c17d2e', weight:3, opacity:0.75, dashArray:'2 8'}).addTo(map);
+
+  stops.forEach(function(s){
+    var color = s.start ? '#2f7ea8' : (s.arrive ? '#2f7ea8' : '#c17d2e');
+    var marker = L.circleMarker([s.lat, s.lng], {
+      radius: (s.start || s.arrive) ? 8 : 6,
+      color: '#fffaf0',
+      weight: 2,
+      fillColor: color,
+      fillOpacity: 1
+    }).addTo(map);
+    marker.bindPopup('<div class="popup-title">' + s.name + '</div><div class="popup-sub">' + s.sub + '</div>');
+  });
+
+  var bounds = L.latLngBounds(latlngs);
+  map.fitBounds(bounds, {padding:[30,30]});
+</script>
+
+</body>
+</html>
