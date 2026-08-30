@@ -258,6 +258,8 @@
   }
   .chip.drive{color:var(--blue);border-color:rgba(47,126,168,.3);background:rgba(47,126,168,.08);}
   .chip.avail{color:#3d7a4c;border-color:rgba(61,122,76,.35);background:rgba(61,122,76,.08);}
+  .chip.weather{color:#3a6b8a;border-color:rgba(58,107,138,.25);background:rgba(58,107,138,.06);}
+  .chip.weather.typical{color:#8a6a3a;border-color:rgba(138,106,58,.25);background:rgba(138,106,58,.06);}
   .book{
     display:inline-block;
     font-family:'Inter',sans-serif;
@@ -419,9 +421,10 @@
           <div class="chips">
             <span class="chip drive">175 mi · 3.5 hr from Seattle</span>
             <span class="chip avail">Available · $50/night</span>
+            <span class="chip weather">82°F/52°F · low rain chance</span>
           </div>
           <a class="book" href="https://www.reserveamerica.com/explore/champoeg-state-heritage-area/OR/405213/overview" target="_blank" rel="noopener">Book on ReserveAmerica</a>
-        </div>
+          <div class="note">Site B12 recommended — Loop B has larger, more private pull-through sites vs. Loop A (tighter, best for rigs under 30ft).</div>
       </div>
     </div>
 
@@ -440,8 +443,10 @@
             <span class="chip drive">55 mi · 1.5 hr</span>
             <span class="chip">Trail of Ten Falls</span>
             <span class="chip avail">Available · $50/night (2 left)</span>
+            <span class="chip weather">63°F/53°F · 20% rain</span>
           </div>
           <a class="book" href="https://www.reserveamerica.com/explore/silver-falls-state-park/OR/402235/overview" target="_blank" rel="noopener">Book on ReserveAmerica</a>
+          <div class="note">Booked: Loop A, Site 95</div>
         </div>
       </div>
     </div>
@@ -460,6 +465,7 @@
           <div class="chips">
             <span class="chip drive">165 mi · 3 hr</span>
             <span class="chip avail">Available · $53/night</span>
+            <span class="chip weather">61°F/51°F · 25% rain</span>
           </div>
           <a class="book" href="https://www.reserveamerica.com/explore/valley-of-the-rogue-state-park/OR/402363/overview" target="_blank" rel="noopener">Book on ReserveAmerica</a>
         </div>
@@ -480,6 +486,7 @@
           <div class="chips">
             <span class="chip drive">130 mi · 2.5 hr</span>
             <span class="chip avail">Available · $35/night</span>
+            <span class="chip weather">63°F/51°F · 20% rain</span>
             <span class="chip">No hookups</span>
           </div>
           <a class="book" href="https://www.parks.ca.gov/?page_id=455" target="_blank" rel="noopener">Reserve — McArthur-Burney Falls</a>
@@ -501,6 +508,7 @@
           <div class="loc">Sacramento, California — riverside, on the Sacramento River</div>
           <div class="chips">
             <span class="chip drive">180 mi · 3.5 hr</span>
+            <span class="chip weather">80°F/56°F · dry</span>
           </div>
           <a class="book" href="http://sherwoodharbor.com/" target="_blank" rel="noopener">Sherwood Harbor — reserve by phone</a>
           <div class="note">Reservations by phone only: 916-371-3471. A few reviewers with larger rigs noted a steep/narrow entrance — worth a heads-up call.</div>
@@ -523,6 +531,7 @@
             <span class="chip drive">170 mi · 3.5 hr</span>
             <span class="chip">Labor Day weekend</span>
             <span class="chip avail">Available · $78.38/night</span>
+            <span class="chip weather">68°F/53°F · dry</span>
           </div>
           <a class="book" href="https://yosemitepinesrv.com/" target="_blank" rel="noopener">Book on Yosemite Pines RV</a>
           <div class="note">30 min drive to the Yosemite entrance · about 1.5 hours total into Yosemite Valley</div>
@@ -540,6 +549,7 @@
           <div class="loc">Bakersfield, California — down via Hwy 41/99</div>
           <div class="chips">
             <span class="chip drive">180 mi · 3.5 hr</span>
+            <span class="chip weather typical">~95°F/65°F · typical, dry</span>
           </div>
           <a class="book" href="https://www.kerncounty.com/government/parks/reservations/kern-river-campground-reservations" target="_blank" rel="noopener">Book with Kern County</a>
         </div>
@@ -556,6 +566,7 @@
           <div class="loc">Santa Paula, CA — near Ojai / Lake Casitas</div>
           <div class="chips">
             <span class="chip drive">110 mi · 2.5 hr</span>
+            <span class="chip weather typical">~85°F/55°F · typical, dry</span>
           </div>
           <a class="book" href="https://koa.com/" target="_blank" rel="noopener">Search KOA Ventura Ranch</a>
         </div>
@@ -572,6 +583,7 @@
           <div class="loc">Malibu, California — slow PCH stretch</div>
           <div class="chips">
             <span class="chip drive">60 mi · 2 hr</span>
+            <span class="chip weather typical">~75°F/60°F · typical, coastal</span>
           </div>
           <a class="book" href="https://www.parks.ca.gov/leocarrillo" target="_blank" rel="noopener">Reserve — Leo Carrillo</a>
         </div>
@@ -589,6 +601,7 @@
           <div class="chips">
             <span class="chip drive">90 mi · 2 hr</span>
             <span class="chip">Full hookups · fits up to 42ft</span>
+            <span class="chip weather typical">~74°F/62°F · typical, coastal</span>
           </div>
           <a class="book" href="https://www.reservecalifornia.com/" target="_blank" rel="noopener">Reserve — San Clemente SB</a>
           <div class="note">Coastal bluff site, beach access via a tunnel under the train tracks. Alt: San Mateo Campground, San Onofre SB (hookups, up to 36ft).</div>
@@ -608,6 +621,7 @@
             <span class="chip drive">60 mi · 1.5 hr</span>
             <span class="chip">Electric + water hookups</span>
             <span class="chip avail">Available · Premium Site #160 · $70/night</span>
+            <span class="chip weather typical">~74°F/63°F · typical, coastal</span>
           </div>
           <a class="book" href="https://www.parks.ca.gov/southcarlsbad" target="_blank" rel="noopener">Reserve — South Carlsbad</a>
         </div>
@@ -624,6 +638,7 @@
           <div class="loc">Trip's end</div>
           <div class="chips">
             <span class="chip drive">30 mi · 1 hr</span>
+            <span class="chip weather typical">~75°F/65°F · typical, dry</span>
           </div>
         </div>
       </div>
