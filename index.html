@@ -31,7 +31,7 @@
     font-family:'Inter',sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1040px;margin:0 auto;padding:64px 24px 96px;}
+  .wrap{max-width:1180px;margin:0 auto;padding:64px 24px 96px;}
 
   header{text-align:center;margin-bottom:12px;}
   .eyebrow{
@@ -318,9 +318,12 @@
 
   .pack-columns{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
     gap:24px;
     margin-top:32px;
+  }
+  @media(max-width:900px){
+    .pack-columns{grid-template-columns:1fr 1fr;}
   }
   @media(max-width:680px){
     .pack-columns{grid-template-columns:1fr;}
@@ -717,6 +720,46 @@
           <div class="pack-item"><input type="checkbox" id="b9"><label for="b9">Leash &amp; harness</label></div>
           <div class="pack-item"><input type="checkbox" id="b10"><label for="b10">Towel</label></div>
           <div class="pack-item"><input type="checkbox" id="b11"><label for="b11">Poop bags</label></div>
+        </div>
+      </div>
+
+      <div class="pack-person">
+        <h2>Layne</h2>
+
+        <div class="pack-cat">
+          <h3>Clothing</h3>
+          <div class="pack-item"><input type="checkbox" id="l1"><label for="l1">Sweats</label></div>
+          <div class="pack-item"><input type="checkbox" id="l2"><label for="l2">T-shirts</label></div>
+          <div class="pack-item"><input type="checkbox" id="l3"><label for="l3">Socks, underwear, bras</label></div>
+          <div class="pack-item"><input type="checkbox" id="l4"><label for="l4">Flannel shirts</label></div>
+          <div class="pack-item"><input type="checkbox" id="l5"><label for="l5">Long sleeve shirts</label></div>
+          <div class="pack-item"><input type="checkbox" id="l6"><label for="l6">Denim jacket</label></div>
+          <div class="pack-item"><input type="checkbox" id="l7"><label for="l7">Flannel jacket</label></div>
+          <div class="pack-item"><input type="checkbox" id="l8"><label for="l8">3 sweatshirts</label></div>
+          <div class="pack-item"><input type="checkbox" id="l9"><label for="l9">Jeans</label></div>
+          <div class="pack-item"><input type="checkbox" id="l10"><label for="l10">Hiking boots</label></div>
+          <div class="pack-item"><input type="checkbox" id="l11"><label for="l11">Slides</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Electronics</h3>
+          <div class="pack-item"><input type="checkbox" id="l12"><label for="l12">Phone charger</label></div>
+          <div class="pack-item"><input type="checkbox" id="l13"><label for="l13">Laptop</label></div>
+          <div class="pack-item"><input type="checkbox" id="l14"><label for="l14">Laptop charger</label></div>
+          <div class="pack-item"><input type="checkbox" id="l15"><label for="l15">Oura Ring charger</label></div>
+          <div class="pack-item"><input type="checkbox" id="l16"><label for="l16">Headphones</label></div>
+          <div class="pack-item"><input type="checkbox" id="l17"><label for="l17">Mouse</label></div>
+          <div class="pack-item"><input type="checkbox" id="l18"><label for="l18">Sound machine for bed</label></div>
+          <div class="pack-item"><input type="checkbox" id="l19"><label for="l19">iPad</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Toiletries</h3>
+          <div class="pack-item"><input type="checkbox" id="l20"><label for="l20">Birth control</label></div>
+          <div class="pack-item"><input type="checkbox" id="l21"><label for="l21">Entyvio shots</label></div>
+          <div class="pack-item"><input type="checkbox" id="l22"><label for="l22">Alcohol swabs</label></div>
+          <div class="pack-item"><input type="checkbox" id="l23"><label for="l23">Contacts</label></div>
+          <div class="pack-item"><input type="checkbox" id="l24"><label for="l24">Contact solution</label></div>
         </div>
       </div>
 
