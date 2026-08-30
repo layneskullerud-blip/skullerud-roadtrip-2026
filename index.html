@@ -373,6 +373,75 @@
     flex-shrink:0;
   }
   .pack-item label{cursor:pointer;}
+
+  .meal-section-title{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:20px;
+    margin:36px 0 16px;
+    color:var(--text);
+  }
+  .meal-section-title:first-of-type{margin-top:8px;}
+  .meal-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:20px;
+  }
+  .meal-card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .meal-photo{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    display:block;
+    background:linear-gradient(135deg,#eee7d2,#e3ddc9);
+  }
+  .meal-photo-fallback{
+    width:100%;
+    aspect-ratio:4/3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#f1ecd9,#e6e9df);
+    color:var(--muted);
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:14px;
+    text-align:center;
+    padding:12px;
+  }
+  .meal-card-body{padding:16px 18px 18px;}
+  .meal-card h4{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:16.5px;
+    margin:0 0 6px;
+  }
+  .meal-method{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:#3a6b8a;
+    background:rgba(58,107,138,.08);
+    border:1px solid rgba(58,107,138,.25);
+    border-radius:6px;
+    padding:3px 8px;
+    margin-bottom:10px;
+  }
+  .meal-steps{
+    margin:0;
+    padding-left:18px;
+    font-size:13px;
+    line-height:1.6;
+    color:var(--text);
+  }
+  .meal-steps li{margin-bottom:2px;}
 </style>
 </head>
 <body>
@@ -387,6 +456,7 @@
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('itinerary', this)">Itinerary</button>
     <button class="tab-btn" onclick="showTab('packing', this)">Packing Lists</button>
+    <button class="tab-btn" onclick="showTab('meals', this)">Meals</button>
   </div>
 
   <div id="tab-itinerary" class="tab-panel active">
@@ -758,6 +828,243 @@
       </div>
 
     </div>
+  </div>
+
+  <div id="tab-meals" class="tab-panel">
+
+    <div class="pack-columns">
+      <div class="pack-person">
+        <h2>Grocery Checklist</h2>
+        <div class="pack-sub">Trader Joe's shopping list</div>
+
+        <div class="pack-cat">
+          <h3>Proteins</h3>
+          <div class="pack-item"><input type="checkbox" id="g1"><label for="g1">Pre-cooked chicken strips</label></div>
+          <div class="pack-item"><input type="checkbox" id="g2"><label for="g2">Marinated chicken thighs</label></div>
+          <div class="pack-item"><input type="checkbox" id="g3"><label for="g3">Carne asada</label></div>
+          <div class="pack-item"><input type="checkbox" id="g4"><label for="g4">Frozen meatballs</label></div>
+          <div class="pack-item"><input type="checkbox" id="g5"><label for="g5">Pre-cooked carnitas</label></div>
+          <div class="pack-item"><input type="checkbox" id="g6"><label for="g6">Chicken tinga</label></div>
+          <div class="pack-item"><input type="checkbox" id="g7"><label for="g7">Rotisserie-style chicken</label></div>
+          <div class="pack-item"><input type="checkbox" id="g8"><label for="g8">Eggs</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Sauces &amp; Pantry</h3>
+          <div class="pack-item"><input type="checkbox" id="g9"><label for="g9">Simmer sauce (Butter Chicken)</label></div>
+          <div class="pack-item"><input type="checkbox" id="g10"><label for="g10">Simmer sauce (Tikka Masala)</label></div>
+          <div class="pack-item"><input type="checkbox" id="g11"><label for="g11">Simmer sauce (Korma)</label></div>
+          <div class="pack-item"><input type="checkbox" id="g12"><label for="g12">Jarred marinara or vodka sauce</label></div>
+          <div class="pack-item"><input type="checkbox" id="g13"><label for="g13">Salsa</label></div>
+          <div class="pack-item"><input type="checkbox" id="g14"><label for="g14">Guacamole</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Frozen</h3>
+          <div class="pack-item"><input type="checkbox" id="g15"><label for="g15">Frozen fried rice</label></div>
+          <div class="pack-item"><input type="checkbox" id="g16"><label for="g16">Ready rice pouches</label></div>
+          <div class="pack-item"><input type="checkbox" id="g17"><label for="g17">Veggie stir-fry bags</label></div>
+          <div class="pack-item"><input type="checkbox" id="g18"><label for="g18">Frozen veggies / fingerling potatoes</label></div>
+          <div class="pack-item"><input type="checkbox" id="g19"><label for="g19">Frozen pizza</label></div>
+          <div class="pack-item"><input type="checkbox" id="g20"><label for="g20">Frozen burritos / enchiladas</label></div>
+          <div class="pack-item"><input type="checkbox" id="g21"><label for="g21">Orange chicken</label></div>
+          <div class="pack-item"><input type="checkbox" id="g22"><label for="g22">Stuffed peppers / chicken cordon bleu</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Dairy &amp; Bread</h3>
+          <div class="pack-item"><input type="checkbox" id="g23"><label for="g23">Shredded Mexican blend cheese</label></div>
+          <div class="pack-item"><input type="checkbox" id="g24"><label for="g24">Sliced cheese</label></div>
+          <div class="pack-item"><input type="checkbox" id="g25"><label for="g25">Tortillas</label></div>
+          <div class="pack-item"><input type="checkbox" id="g26"><label for="g26">Naan</label></div>
+          <div class="pack-item"><input type="checkbox" id="g27"><label for="g27">Dinner rolls / bread for grilled cheese</label></div>
+        </div>
+
+        <div class="pack-cat">
+          <h3>Soup &amp; Sides</h3>
+          <div class="pack-item"><input type="checkbox" id="g28"><label for="g28">Butternut squash soup</label></div>
+          <div class="pack-item"><input type="checkbox" id="g29"><label for="g29">Tomato soup</label></div>
+          <div class="pack-item"><input type="checkbox" id="g30"><label for="g30">Corn chowder</label></div>
+          <div class="pack-item"><input type="checkbox" id="g31"><label for="g31">Bagged salad kit</label></div>
+          <div class="pack-item"><input type="checkbox" id="g32"><label for="g32">Mac and cheese cups</label></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="meal-section-title">Stovetop</h3>
+    <div class="meal-grid">
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Butter%20Chicken%20Curry.png?width=400" alt="Simmer sauce chicken with rice" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Simmer Sauce Chicken + Rice</div>'">
+        <div class="meal-card-body">
+          <h4>Simmer Sauce Chicken + Rice</h4>
+          <span class="meal-method">One pot</span>
+          <ol class="meal-steps">
+            <li>Heat simmer sauce and pre-cooked chicken strips together in a pot until warmed through.</li>
+            <li>Microwave a ready-rice pouch separately (2 min).</li>
+            <li>Serve chicken and sauce over rice.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Spaghetti%20with%20meatballs.jpg?width=400" alt="Pasta with marinara and meatballs" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Pasta + Marinara + Meatballs</div>'">
+        <div class="meal-card-body">
+          <h4>Pasta + Marinara + Meatballs</h4>
+          <span class="meal-method">One pot</span>
+          <ol class="meal-steps">
+            <li>Boil pasta until al dente, drain.</li>
+            <li>Add jarred marinara and frozen meatballs to the same pot.</li>
+            <li>Simmer a few minutes until meatballs are heated through.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Egg%20fried%20rice.jpg?width=400" alt="Fried rice with egg" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Fried Rice + Egg</div>'">
+        <div class="meal-card-body">
+          <h4>Fried Rice + Egg</h4>
+          <span class="meal-method">One skillet</span>
+          <ol class="meal-steps">
+            <li>Heat frozen fried rice in a skillet per package directions.</li>
+            <li>Push rice aside, scramble an egg in the same pan.</li>
+            <li>Mix together and serve.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tomato%20soup%20with%20grilled%20cheese.jpg?width=400" alt="Soup and grilled cheese" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Soup + Grilled Cheese</div>'">
+        <div class="meal-card-body">
+          <h4>Soup + Grilled Cheese</h4>
+          <span class="meal-method">Two pans</span>
+          <ol class="meal-steps">
+            <li>Heat soup in a small pot.</li>
+            <li>Butter bread, griddle with cheese in a second pan until golden both sides.</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 class="meal-section-title">Oven</h3>
+    <div class="meal-grid">
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sheet%20pan%20chicken%20and%20vegetables.jpg?width=400" alt="Sheet-pan chicken and veggies" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Sheet-Pan Chicken + Veggies</div>'">
+        <div class="meal-card-body">
+          <h4>Sheet-Pan Chicken + Veggies</h4>
+          <span class="meal-method">One tray</span>
+          <ol class="meal-steps">
+            <li>Line a sheet pan with foil.</li>
+            <li>Add marinated chicken thighs (or carne asada) and frozen veggies/potatoes.</li>
+            <li>Bake per package directions until chicken is cooked through.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Frozen%20pizza.jpg?width=400" alt="Frozen pizza" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Frozen Pizza</div>'">
+        <div class="meal-card-body">
+          <h4>Frozen Pizza</h4>
+          <span class="meal-method">One tray</span>
+          <ol class="meal-steps">
+            <li>Bake straight from freezer per package directions.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Stuffed%20bell%20peppers.jpg?width=400" alt="Stuffed peppers" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Stuffed Chicken / Peppers</div>'">
+        <div class="meal-card-body">
+          <h4>Stuffed Chicken / Peppers</h4>
+          <span class="meal-method">One tray</span>
+          <ol class="meal-steps">
+            <li>Bake frozen stuffed item straight from freezer per package directions.</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 class="meal-section-title">Microwave</h3>
+    <div class="meal-grid">
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Orange%20chicken.jpg?width=400" alt="Orange chicken with stir-fry veggies" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Orange Chicken + Stir-Fry</div>'">
+        <div class="meal-card-body">
+          <h4>Orange Chicken + Stir-Fry Veggies</h4>
+          <span class="meal-method">Microwave</span>
+          <ol class="meal-steps">
+            <li>Microwave orange chicken per package directions.</li>
+            <li>Microwave veggie stir-fry bag separately, combine.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Burrito.jpg?width=400" alt="Frozen burrito" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Frozen Burritos / Enchiladas</div>'">
+        <div class="meal-card-body">
+          <h4>Frozen Burritos / Enchiladas</h4>
+          <span class="meal-method">Microwave</span>
+          <ol class="meal-steps">
+            <li>Microwave per package directions.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Macaroni%20and%20cheese.jpg?width=400" alt="Mac and cheese" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Mac and Cheese</div>'">
+        <div class="meal-card-body">
+          <h4>Mac and Cheese</h4>
+          <span class="meal-method">Microwave</span>
+          <ol class="meal-steps">
+            <li>Microwave cup/tray per package directions. Good toddler backup for Wayne.</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 class="meal-section-title">No-Cook / Assembly</h3>
+    <div class="meal-grid">
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tacos.jpg?width=400" alt="Taco night" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Taco Night</div>'">
+        <div class="meal-card-body">
+          <h4>Taco Night</h4>
+          <span class="meal-method">No cook</span>
+          <ol class="meal-steps">
+            <li>Warm pre-cooked carnitas or chicken tinga 2 min.</li>
+            <li>Serve with tortillas, cheese, salsa, guac.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Rotisserie%20chicken.jpg?width=400" alt="Rotisserie chicken and salad" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Rotisserie Chicken + Salad</div>'">
+        <div class="meal-card-body">
+          <h4>Rotisserie Chicken + Salad + Naan</h4>
+          <span class="meal-method">No cook</span>
+          <ol class="meal-steps">
+            <li>Plate rotisserie-style chicken with bagged salad kit and naan. Assembly only.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img class="meal-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Quesadilla.jpg?width=400" alt="Quesadillas" onerror="this.outerHTML='<div class=\'meal-photo-fallback\'>Quesadillas</div>'">
+        <div class="meal-card-body">
+          <h4>Quesadillas</h4>
+          <span class="meal-method">One pan</span>
+          <ol class="meal-steps">
+            <li>Fill tortilla with cheese (and leftover protein), griddle 2 min per side.</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 
   <footer>Skullerud Family Roadtrip 2026 · Aug 31 – Sep 13</footer>
