@@ -427,7 +427,7 @@
   }
   .option-columns{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
     gap:24px;
   }
   @media(max-width:780px){
@@ -763,8 +763,8 @@
     </div>
 
   <div class="route-branch">
-    <div class="route-branch-title">Route Home — Two Options</div>
-    <div class="route-branch-sub">Both depart Wawona Thursday, Sep 10 · both arrive Monday, Sep 14 · pick one path from here</div>
+    <div class="route-branch-title">Route Home — Three Options</div>
+    <div class="route-branch-sub">All three depart Wawona Thursday, Sep 10 · pick one path from here</div>
 
     <div class="option-columns">
 
@@ -813,6 +813,31 @@
           <div class="opt-stop-name">Vail Lake / Dripping Springs (Temecula)</div>
           <div class="opt-stop-meta">1 night · Sun–Mon, Sep 13–14 · ~250-270 mi / 5 hr via 101 → CA-166 → I-5 → I-15</div>
           <div class="opt-stop-note">Bridges the long final stretch, avoiding both the Highway 33 pass and the LA/OC corridor entirely. Final day: short ~60 mi / 1-1.5 hr hop to San Diego.</div>
+        </div>
+
+        <div class="opt-arrive">Arrive San Diego — Monday, Sep 14</div>
+      </div>
+
+      <div class="option-card">
+        <h3>Option C — Two Real Destinations</h3>
+        <div class="option-sub">4 nights · Arrive Mon Sep 14 · every day under 4 hours</div>
+
+        <div class="opt-stop">
+          <div class="opt-stop-name">Lake Isabella / Kernville</div>
+          <div class="opt-stop-meta">2 nights · Thu–Sat, Sep 10–12 · ~180 mi / ~3.5-4 hr from Wawona</div>
+          <div class="opt-stop-note">A genuine outdoorsy destination, not a stepping stone — whitewater rafting, kayaking, fishing, hiking into Sequoia National Forest. Historic Kernville village 5 min away (restaurants, shops, museum). Lake Isabella/Kern River KOA Journey has full hookups, a pool, and a splash pad; Rivernook Campground is the riverfront alternative if you'd rather watch rafters float by from your site. Route in via Hwy 178 through Kern Canyon — scenic but narrow/winding in spots, worth checking recent road conditions.</div>
+        </div>
+
+        <div class="opt-stop">
+          <div class="opt-stop-name">Pyramid Lake (Los Alamos Campground)</div>
+          <div class="opt-stop-meta">2 nights · Sat–Mon, Sep 12–14 · ~120-130 mi / ~2.5-3 hr from Kernville</div>
+          <div class="opt-stop-note">Second real destination — reservoir surrounded by Angeles/Los Padres National Forest peaks, boating, fishing, swimming, free visitor center with a lake-view deck. Right on I-5, no detour. Sites fit 25-35ft (verify yours); Pyramid Lake RV Resort nearby has full hookups up to 61ft if you'd rather not dry camp two stops in a row.</div>
+        </div>
+
+        <div class="opt-stop">
+          <div class="opt-stop-name">San Diego</div>
+          <div class="opt-stop-meta">~190 mi / ~3.5 hr via I-5 → I-15</div>
+          <div class="opt-stop-note">Same safe, LA-bypassing final leg as Option C.</div>
         </div>
 
         <div class="opt-arrive">Arrive San Diego — Monday, Sep 14</div>
